@@ -4,7 +4,7 @@ module.exports = (app) => {
 
     const { createRules, validate } = require("../validators/index");
 
-    router.post("/", createRules(), validate, todoController.create);
+    router.post("/", validate(createRules), todoController.create);
 
     app.use("/api/todos", router);
 };
