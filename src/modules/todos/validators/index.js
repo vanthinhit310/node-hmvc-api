@@ -2,8 +2,8 @@ const { check, validationResult } = require("express-validator");
 
 const createRules = () => {
     return [
-        check("title").isString().notEmpty(),
-        check("description").isString().notEmpty(),
+        check("title").isString().bail().notEmpty(),
+        check("description").isString().bail().notEmpty(),
     ];
 };
 
