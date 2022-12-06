@@ -24,4 +24,6 @@ module.exports = (sequelize) => {
         },
         { sequelize, modelName: "Todo" }
     );
+
+    return Todo
 };
