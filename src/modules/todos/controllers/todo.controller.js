@@ -1,6 +1,7 @@
 const db = require("../../../config/baseModel");
 const Todo = db.todos;
 const Op = db.Sequelize.Op;
+const helpers = require("../../../helpers");
 
 exports.create = async (req, res) => {
     try {
@@ -27,9 +28,11 @@ exports.create = async (req, res) => {
     }
 };
 
-exports.getList = (req, res) => {
+exports.getList = async (req, res) => {
     try {
         const { search, page, perPage } = req.query;
+        const { limit, offset } = helpers.getPagination(page, perPage);
+        console.log({ limit, offset });
         const condition = search
             ? {
                   [Op.or]: [
@@ -46,18 +49,18 @@ exports.getList = (req, res) => {
                   ],
               }
             : null;
-console.log({condition});
-        const items = Todo.findAndCountAll({
+
+        const items = await Todo.findAndCountAll({
             where: condition,
-            offset: parseInt(perPage) * parseInt(page),
-            limit: parseInt(perPage),
+            offset: parseInt(limit) * parseInt(offset),
+            limit: parseInt(limit),
             order: [["id", "DESC"]],
         });
-
+        console.log({ items });
         return res.status(200).send({
             success: true,
             message: "success",
-            data: items,
+            data: helpers.getPagingData(items, offset, limit),
         });
     } catch (error) {
         return res.status(500).send({
