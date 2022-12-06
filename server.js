@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 });
 
 // Register router
-// require("./app/routes/turorial.routes")(app);
+require("./src/modules/todos/routes/todo.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.PORT || 8082;
