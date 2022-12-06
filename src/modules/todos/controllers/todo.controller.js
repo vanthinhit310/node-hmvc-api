@@ -26,3 +26,43 @@ exports.create = async (req, res) => {
         });
     }
 };
+
+exports.getList = (req, res) => {
+    try {
+        const { search, page, perPage } = req.query;
+        const condition = search
+            ? {
+                  [Op.or]: [
+                      {
+                          title: {
+                              [Op.like]: `%${search}%`,
+                          },
+                      },
+                      {
+                          description: {
+                              [Op.like]: `%${search}%`,
+                          },
+                      },
+                  ],
+              }
+            : null;
+console.log({condition});
+        const items = Todo.findAndCountAll({
+            where: condition,
+            offset: parseInt(perPage) * parseInt(page),
+            limit: parseInt(perPage),
+            order: [["id", "DESC"]],
+        });
+
+        return res.status(200).send({
+            success: true,
+            message: "success",
+            data: items,
+        });
+    } catch (error) {
+        return res.status(500).send({
+            success: false,
+            message: "Have an error. Please contact to admin!",
+        });
+    }
+};

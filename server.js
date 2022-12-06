@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to DB
 db.sequelize
-    .sync({ force: true })
+    .sync()
     .then(() => {
         console.log("Synced db.");
     })
